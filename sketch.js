@@ -88,6 +88,8 @@ async function rnboSetup() {
 const s = p => {
   let x = 100;
   let y = 100;
+  let value = 0;
+  let clickText = "click to activate sound!";
 
   var angle = 2.0;
   var offset = 300;
@@ -106,8 +108,7 @@ const s = p => {
      cnv = p.createCanvas(p.windowWidth, p.windowHeight);
      offsetX = p.windowWidth/2;
      offsetY = p.windowHeight/2;
-     p.noStroke();
-     p.background(0,0);
+     v1 = p.createVector(offsetX, offsetY);
   };
 
   p.draw = function() {
@@ -115,15 +116,40 @@ const s = p => {
     const volP = drummer.parametersById.get("volume");
     volP.value = adjustedY;
 
-    let pX = offsetX + p.cos(angle) * scalar;
-    let pY = offsetY + p.sin(angle) * scalar;
+    let adjustedX = p.mouseX/p.windowWidth;
+    const balanceP = drummer.parametersById.get("balance");
+    balanceP.value = adjustedX;
 
-    p.fill(255, 94, 242, a);
-    p.ellipse(pX, pY, 5, 5);
-    angle += speed;
-    scalar += speed;
-    a -= 0.2;
+    let uAlpha = 1 - (p.mouseX/p.windowWidth);
+
+    p.background(255, 255 * uAlpha);
+    p.angleMode(p.DEGREES);
+    p.textAlign(p.CENTER);
+    p.textSize(32);
+
+    p.push();
+    p.strokeWeight(20);
+    p.stroke(255 * (p.mouseY/p.windowHeight));
+    p.line(offsetX, offsetY, p.mouseX, p.mouseY);
+    p.pop();
+
+    p.text(clickText, offsetX, p.windowHeight * 0.1);
+
+    // p.push();
+    // p.translate(offsetX, offsetY)
+    // p.strokeWeight(20)
+    // p.rotate(270 * adjustedY);
+    // p.line(0, 0, 0, 100);
+    // p.pop();
   };
+
+  p.mouseClicked = function(){
+    if (value === 0) {
+    clickText = "click to activate sound!";
+  } else {
+    clickText = "";
+    }
+  }
 };
 
 new p5(s); // invoke p5
