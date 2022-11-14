@@ -1,5 +1,5 @@
 async function rnboSetup() {
-    const drummerExportURL = "/rK.export.json";
+    const drummerExportURL = "rK.export.json";
 
     // Create AudioContext
     const WAContext = window.AudioContext || window.webkitAudioContext;
